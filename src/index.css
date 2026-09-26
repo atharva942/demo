@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+:root {
+  --palace-sandstone: #f7f3eb;
+  --palace-ivory: #fdfbf7;
+  --palace-amber: #b45309;
+  --palace-terracotta: #c2410c;
+}
+
+body {
+  background-color: #f6f1e8;
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(217, 119, 6, 0.05) 0px, transparent 40%),
+    radial-gradient(at 90% 15%, rgba(194, 65, 12, 0.04) 0px, transparent 45%),
+    radial-gradient(at 50% 95%, rgba(180, 83, 9, 0.03) 0px, transparent 50%),
+    linear-gradient(180deg, #fbf7f0 0%, #f4eee2 100%);
+  background-attachment: fixed;
+  color: #1c1917;
+}
+
+/* Subtle Rajasthani jali / palace lattice motif accent */
+.palace-motif-pattern {
+  background-image: radial-gradient(rgba(180, 83, 9, 0.06) 1px, transparent 0);
+  background-size: 20px 20px;
+}
