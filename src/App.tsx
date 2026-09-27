@@ -6,7 +6,6 @@ import {
   HeartHandshake,
   MessageSquare,
   DollarSign,
-  Layers,
 } from "lucide-react";
 import { Header } from "./components/Header";
 import { CommandCenterTab } from "./components/CommandCenterTab";
@@ -17,6 +16,7 @@ import { SentimentTab } from "./components/SentimentTab";
 import { RevenueTab } from "./components/RevenueTab";
 import { AuditModal } from "./components/AuditModal";
 import { QuickActionsSidebar } from "./components/QuickActionsSidebar";
+import WeatherTwin from "./components/WeatherTwin"; // <-- IMPORTED DIGITAL TWIN
 
 import {
   initialKPIs,
@@ -259,6 +259,12 @@ export default function App() {
     setTimeout(() => setGlobalBanner(null), 6000);
   };
 
+  // HANDLER FOR WEATHER DIGITAL TWIN
+  const handleRunWeatherSimulation = (data: any) => {
+    setGlobalBanner(`Digital Twin Synced: Simulated Weather Impacts Triggered. Running AI Audit...`);
+    setIsAuditModalOpen(true);
+  };
+
   const activeAlertCount = alerts.filter((a) => !a.resolved).length;
   const warningAssetCount = assets.filter((a) => a.status !== "optimal").length;
 
@@ -307,7 +313,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f7f3eb]/95 text-stone-900 flex flex-col font-sans palace-motif-pattern">
-      {/* Header with quick metrics and actions */}
       <Header
         kpis={kpis}
         onOpenAudit={() => setIsAuditModalOpen(true)}
@@ -315,21 +320,18 @@ export default function App() {
         isSimulating={isSimulating}
       />
 
-      {/* Global Notification Banner */}
       {globalBanner && (
         <div className="bg-amber-950 text-amber-100 px-4 py-2.5 text-xs text-center font-medium shadow-xs border-b border-amber-800 animate-in slide-in-from-top duration-200">
           ✨ {globalBanner}
         </div>
       )}
 
-      {/* Simple, intuitive primary navigation with Rajasthan warm aesthetic */}
       <div className="bg-[#fefdfa]/95 border-b border-amber-200/80 sticky top-[73px] z-20 shadow-xs backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto py-2.5 no-scrollbar" aria-label="Tabs">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
-
               return (
                 <button
                   key={tab.id}
@@ -359,7 +361,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* Persistent Quick Actions Sidebar (Visible across all tabs) */}
       <QuickActionsSidebar
         kpis={kpis}
         assets={assets}
@@ -369,16 +370,20 @@ export default function App() {
         onBroadcastStaff={handleBroadcastStaff}
       />
 
-      {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {activeTab === "command" && (
-          <CommandCenterTab
-            kpis={kpis}
-            alerts={alerts}
-            onResolveAlert={handleResolveAlert}
-            onNavigateTab={(tab) => setActiveTab(tab)}
-            onTriggerAudit={() => setIsAuditModalOpen(true)}
-          />
+          <div className="flex flex-col gap-6">
+            {/* DIGITAL TWIN COMPONENT INJECTED HERE */}
+            <WeatherTwin onRunSimulation={handleRunWeatherSimulation} />
+            
+            <CommandCenterTab
+              kpis={kpis}
+              alerts={alerts}
+              onResolveAlert={handleResolveAlert}
+              onNavigateTab={(tab) => setActiveTab(tab)}
+              onTriggerAudit={() => setIsAuditModalOpen(true)}
+            />
+          </div>
         )}
 
         {activeTab === "operations" && (
@@ -418,7 +423,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Floating AI Status & Chat Launcher */}
       {activeTab !== "concierge" && (
         <button
           onClick={() => {
@@ -436,7 +440,6 @@ export default function App() {
         </button>
       )}
 
-      {/* Footer */}
       <footer className="border-t border-amber-200/80 bg-[#fefdfa] py-4 text-xs text-stone-500 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
@@ -452,7 +455,6 @@ export default function App() {
         </div>
       </footer>
 
-      {/* 360 AI Deep Audit Modal */}
       <AuditModal
         isOpen={isAuditModalOpen}
         onClose={() => setIsAuditModalOpen(false)}
